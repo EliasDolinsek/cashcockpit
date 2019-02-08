@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../tools/auth.dart';
 
 class SignInOptionPage extends StatelessWidget {
   @override
@@ -70,12 +71,30 @@ class SignInOptionPage extends StatelessWidget {
             MaterialButton(
               child: Text("CONTINUE ANONYMOUSLY"),
               onPressed: () {
-                print("Continue Anonymously");
+                _showConfirmContinueAnonymouslyDialog(context);
               },
             ),
           ],
         ),
       ),
     );
+  }
+
+  void _showConfirmContinueAnonymouslyDialog(BuildContext context){
+    showDialog(context: context, builder: (BuildContext context) => AlertDialog(title: Text("Continue Anonymously"), content: Text("You won't be able to use some features if you continue anonymously!"),actions: <Widget>[
+      MaterialButton(
+        child: Text("Cancel"),
+        onPressed: () => Navigator.pop(context),
+      ),
+      MaterialButton(
+        child: Text("Continue Anonymously"),
+        onPressed: (){
+          Auth().signInAnonymously().whenComplete((){
+            Navigator.pop(context);
+            Navigator.pushReplacementNamed(context, "/main");
+          });
+        },
+      )
+    ],));
   }
 }
