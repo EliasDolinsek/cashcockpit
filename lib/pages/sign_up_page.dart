@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../tools/auth.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 class SignUpPage extends StatelessWidget {
   @override
@@ -11,21 +10,19 @@ class SignUpPage extends StatelessWidget {
       appBar: AppBar(
         title: Text("Sign Up"),
       ),
-      body: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
-          child: _SignUpInputsPage()),
+      body: Padding(padding: EdgeInsets.all(16.0), child: _SignUpInputs()),
     );
   }
 }
 
-class _SignUpInputsPage extends StatefulWidget {
+class _SignUpInputs extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    return _SignUpInputsPageState();
+    return _SignUpInputsState();
   }
 }
 
-class _SignUpInputsPageState extends State<_SignUpInputsPage> {
+class _SignUpInputsState extends State<_SignUpInputs> {
   final _key = GlobalKey<FormState>();
   bool _agreedToPrivacyPolicy = false;
   String _email, _password, _passwordConformation;
@@ -38,20 +35,21 @@ class _SignUpInputsPageState extends State<_SignUpInputsPage> {
       child: ListView(
         children: <Widget>[
           TextFormField(
-              autocorrect: false,
-              keyboardType: TextInputType.emailAddress,
-              decoration: InputDecoration(
-                  border: OutlineInputBorder(), labelText: "E-Mail"),
-              validator: (value) {
-                if (!RegExp(
-                        "^[a-zA-Z0-9.!#\$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*\$")
-                    .hasMatch(value)) {
-                  return "Enter a valid E-Mail address";
-                }
-              },
-              onSaved: (value) {
-                _email = value;
-              }),
+            autocorrect: false,
+            keyboardType: TextInputType.emailAddress,
+            decoration: InputDecoration(
+                border: OutlineInputBorder(), labelText: "E-Mail"),
+            validator: (value) {
+              if (!RegExp(
+                      "^[a-zA-Z0-9.!#\$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*\$")
+                  .hasMatch(value)) {
+                return "Enter a valid E-Mail address";
+              }
+            },
+            onSaved: (value) {
+              _email = value;
+            },
+          ),
           SizedBox(
             height: 16,
           ),
@@ -105,24 +103,24 @@ class _SignUpInputsPageState extends State<_SignUpInputsPage> {
             },
           ),
           Visibility(
-            visible: _errorMessage != null,
-            maintainSize: false,
-            child: Padding(
-              padding: EdgeInsets.symmetric(vertical: 8),
-              child:                 Text(
-                _errorMessage == null ? "" : _errorMessage,
-                textAlign: TextAlign.center,
-                style: TextStyle(color: Colors.red),
-              ),
-            )
-          ),
+              visible: _errorMessage != null,
+              maintainSize: false,
+              child: Padding(
+                padding: EdgeInsets.symmetric(vertical: 8),
+                child: Text(
+                  _errorMessage == null ? "" : _errorMessage,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(color: Colors.red),
+                ),
+              )),
           RaisedButton(
             child: Text("SIGN UP"),
             onPressed: _agreedToPrivacyPolicy
                 ? () {
-                    _key.currentState.validate();
-                    _key.currentState.save();
-                    _signUpUser();
+                    if(_key.currentState.validate()){
+                      _key.currentState.save();
+                      _signUpUser();
+                    }
                   }
                 : null,
             color: Theme.of(context).accentColor,

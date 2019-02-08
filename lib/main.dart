@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import 'package:firebase_auth/firebase_auth.dart';
+
 import './pages/main_page.dart';
 import './pages/sign_in_option_page.dart';
 import './pages/sign_in_page.dart';
@@ -28,7 +30,7 @@ class CashCockpit extends StatelessWidget {
         "/sign_in":(BuildContext context) => SignInPage(),
         "/sign_up":(BuildContext context) => SignUpPage(),
       },
-      home: SignInOptionPage(),
+      home: MainPage(),
     );
   }
 }
