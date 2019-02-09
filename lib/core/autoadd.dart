@@ -21,4 +21,12 @@ class AutoAdd {
     "periodicity":periodicity,
     "bill":bill.toMap()
   };
+
+  static AutoAdd findById(List<AutoAdd> autoAdds, String id){
+    autoAdds.forEach((autoAdd){
+      if(autoAdd.id == id){
+        return autoAdd;
+      }
+    });
+  }
 }

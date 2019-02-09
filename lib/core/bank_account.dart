@@ -10,4 +10,12 @@ class BankAccount {
       id: s.key, name: s.value["name"], balance: s.value["balance"]);
 
   Map<String, dynamic> toMap() => {"name": name, "balance": balance};
+
+  static BankAccount findById(List<BankAccount> bankAccounts, String id) {
+    bankAccounts.forEach((bankAccount) {
+      if (bankAccount.id == id) {
+        return bankAccount;
+      }
+    });
+  }
 }

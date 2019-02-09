@@ -9,10 +9,15 @@ class Category {
   factory Category.fromSnapshot(DataSnapshot s) =>
       Category(id: s.key, name: s.value["name"], goal: Goal.fromSnapshot(s));
 
-  Map<String, dynamic> toMap() => {
-    "name":name,
-    "goal":goal.toMap()
-  };
+  Map<String, dynamic> toMap() => {"name": name, "goal": goal.toMap()};
+
+  static Category findById(List<Category> categories, String id) {
+    categories.forEach((category) {
+      if (category.id == id) {
+        return category;
+      }
+    });
+  }
 }
 
 class Goal {
@@ -20,9 +25,8 @@ class Goal {
 
   Goal({this.amount});
 
-  factory Goal.fromSnapshot(DataSnapshot s) => Goal(amount: s.value["goal"]);
+  factory Goal.fromSnapshot(DataSnapshot s) =>
+      Goal(amount: s.value["goal.amount"]);
 
-  Map<String, dynamic> toMap() => {
-    "amount":amount
-  };
+  Map<String, dynamic> toMap() => {"amount": amount};
 }

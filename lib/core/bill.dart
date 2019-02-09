@@ -31,11 +31,19 @@ class Bill {
       );
 
   Map<String, dynamic> toMap() => {
-    "description":description,
-    "imageUrl":imageUrl,
-    "categoryId":categoryId,
-    "bankAccountId":bankAccountId,
-    "amount":amount,
-    "type":type
-  };
+        "description": description,
+        "imageUrl": imageUrl,
+        "categoryId": categoryId,
+        "bankAccountId": bankAccountId,
+        "amount": amount,
+        "type": type
+      };
+
+  static Bill findById(List<Bill> bills, String id) {
+    bills.forEach((bill) {
+      if (bill.id == id) {
+        return bill;
+      }
+    });
+  }
 }
