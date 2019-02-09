@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-class MainPage extends StatelessWidget {
+import '../core/data/data_provider.dart';
 
-  void _showSignInOptionsPageIfUserIsNotAuthenticated(BuildContext context) async{
+class MainPage extends StatelessWidget {
+  final DataProvider dataProvider = DataProvider();
+
+  void _showSignInOptionsPageIfUserIsNotAuthenticated(
+      BuildContext context) async {
     final FirebaseUser user = await FirebaseAuth.instance.currentUser();
-    if(user == null){
+
+    if (user == null) {
       Navigator.pushReplacementNamed(context, "/sign_in_options");
     } else {
       print("Signed in as ${user.email}");
@@ -15,6 +20,7 @@ class MainPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     _showSignInOptionsPageIfUserIsNotAuthenticated(context);
+
     return Scaffold(
       body: Text("MainPage"),
     );

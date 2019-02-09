@@ -30,7 +30,7 @@ class _SignInInputsState extends State<_SignInInputs> {
   final _key = GlobalKey<FormState>();
   String _email, _password;
   String _errorMessage;
-  bool _resetPasswordActive = false;
+  bool _signInProcessActive = false;
 
   @override
   Widget build(BuildContext context) {
@@ -84,10 +84,13 @@ class _SignInInputsState extends State<_SignInInputs> {
           ),
           RaisedButton(
             child: Text("SIGN IN"),
-            onPressed: () {
-              if(_key.currentState.validate()){
+            onPressed: _signInProcessActive ? null : () {
+              if (_key.currentState.validate()) {
                 _key.currentState.save();
                 _signInUser();
+                setState(() {
+                  _signInProcessActive = true;
+                });
               }
             },
             color: Theme.of(context).accentColor,
@@ -95,15 +98,16 @@ class _SignInInputsState extends State<_SignInInputs> {
           ),
           MaterialButton(
             child: Text("RESET PASSWORD"),
-            onPressed: (){
-              _resetPasswordActive = true;
-              if(_key.currentState.validate()){
+            onPressed: () {
+              if (_key.currentState.validate()) {
                 _key.currentState.save();
-                FirebaseAuth.instance.sendPasswordResetEmail(email: _email).whenComplete((){
-                  Scaffold.of(context).showSnackBar(SnackBar(content: Text("Password reset email got send")));
+                FirebaseAuth.instance
+                    .sendPasswordResetEmail(email: _email)
+                    .whenComplete(() {
+                  Scaffold.of(context).showSnackBar(
+                      SnackBar(content: Text("Password reset email got send")));
                 });
               }
-              _resetPasswordActive = false;
             },
           )
         ],
@@ -112,15 +116,14 @@ class _SignInInputsState extends State<_SignInInputs> {
   }
 
   void _signInUser() async {
-    try {
-      await Auth().signInUser(_email, _password);
-      Navigator.pushReplacementNamed(context, "/main");
-    } catch (e) {
+    await Auth().signInUser(_email, _password).catchError((e) {
       if (e is PlatformException) {
         setState(() {
-          _errorMessage = e.message;
+          _errorMessage = e.code;
         });
       }
-    }
+    }).whenComplete((){
+      Navigator.pushReplacementNamed(context, "/main");
+    });
   }
 }

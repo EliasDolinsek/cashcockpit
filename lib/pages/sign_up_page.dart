@@ -24,7 +24,7 @@ class _SignUpInputs extends StatefulWidget {
 
 class _SignUpInputsState extends State<_SignUpInputs> {
   final _key = GlobalKey<FormState>();
-  bool _agreedToPrivacyPolicy = false;
+  bool _agreedToPrivacyPolicy = false, _signUpProcessActive = false;
   String _email, _password, _passwordConformation;
   String _errorMessage;
 
@@ -115,11 +115,14 @@ class _SignUpInputsState extends State<_SignUpInputs> {
               )),
           RaisedButton(
             child: Text("SIGN UP"),
-            onPressed: _agreedToPrivacyPolicy
+            onPressed: _agreedToPrivacyPolicy && !_signUpProcessActive
                 ? () {
                     if(_key.currentState.validate()){
                       _key.currentState.save();
                       _signUpUser();
+                      setState(() {
+                        _signUpProcessActive = true;
+                      });
                     }
                   }
                 : null,
