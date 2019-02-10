@@ -4,29 +4,27 @@ class Category {
   String id, name;
   Goal goal;
 
-  Category({this.id, this.name, this.goal});
+  Category(this.goal, {this.id, this.name = "New Category"});
 
   factory Category.fromSnapshot(DataSnapshot s) =>
-      Category(id: s.key, name: s.value["name"], goal: Goal.fromSnapshot(s));
+      Category(Goal.fromSnapshot(s), id: s.key, name: s.value["name"]);
 
   Map<String, dynamic> toMap() => {"name": name, "goal": goal.toMap()};
 
-  static Category findById(List<Category> categories, String id) {
-    categories.forEach((category) {
-      if (category.id == id) {
-        return category;
-      }
-    });
-  }
+  static Category findById(List<Category> categories, String id) =>
+      categories.firstWhere((category) => category.id == id);
 }
 
 class Goal {
   double amount;
+  bool enabled;
 
-  Goal({this.amount});
+  Goal({this.amount = 0, this.enabled = false});
 
-  factory Goal.fromSnapshot(DataSnapshot s) =>
-      Goal(amount: s.value["goal.amount"]);
+  factory Goal.fromSnapshot(DataSnapshot s) {
+    Map<dynamic, dynamic> goalMap = s.value["goal"];
+    return Goal(amount: double.parse(goalMap["amount"].toString()), enabled: goalMap["enabled"]);
+  }
 
-  Map<String, dynamic> toMap() => {"amount": amount};
+  Map<String, dynamic> toMap() => {"amount": amount, "enabled": enabled};
 }

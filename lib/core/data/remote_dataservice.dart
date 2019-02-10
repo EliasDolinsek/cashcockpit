@@ -8,6 +8,10 @@ class RemoteDataService {
       autoAddsReference;
   FirebaseDatabase _firebaseDatabase = FirebaseDatabase.instance;
 
+  RemoteDataService(){
+    _firebaseDatabase.setPersistenceEnabled(true);
+  }
+
   Future<void> setupDatalinks() async {
     final user = await FirebaseAuth.instance.currentUser();
 

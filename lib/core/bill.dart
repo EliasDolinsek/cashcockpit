@@ -39,11 +39,6 @@ class Bill {
         "type": type
       };
 
-  static Bill findById(List<Bill> bills, String id) {
-    bills.forEach((bill) {
-      if (bill.id == id) {
-        return bill;
-      }
-    });
-  }
+  static Bill findById(List<Bill> bills, String id) =>
+      bills.firstWhere((category) => category.id == id);
 }

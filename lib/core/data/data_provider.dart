@@ -6,21 +6,21 @@ import '../category.dart';
 import '../bill.dart';
 
 class DataProvider {
-  final List<Function> onCategoryAdded = [];
-  final List<Function> onCategoryRemoved = [];
-  final List<Function> onCategoryChanged = [];
+  final List<Function(Category value)> onCategoryAdded = [];
+  final List<Function(Category value)> onCategoryRemoved = [];
+  final List<Function(Category value)> onCategoryChanged = [];
 
-  final List<Function> onBankAccountAdded = [];
-  final List<Function> onBankAccountRemoved = [];
-  final List<Function> onBankAccountChanged = [];
+  final List<Function(BankAccount value)> onBankAccountAdded = [];
+  final List<Function(BankAccount value)> onBankAccountRemoved = [];
+  final List<Function(BankAccount value)> onBankAccountChanged = [];
 
-  final List<Function> onBillAdded = [];
-  final List<Function> onBillRemoved = [];
-  final List<Function> onBillChanged = [];
+  final List<Function(Bill value)> onBillAdded = [];
+  final List<Function(Bill value)> onBillRemoved = [];
+  final List<Function(Bill value)> onBillChanged = [];
 
-  final List<Function> onAutoAddAdded = [];
-  final List<Function> onAutoAddRemoved = [];
-  final List<Function> onAutoAddChanged = [];
+  final List<Function(AutoAdd value)> onAutoAddAdded = [];
+  final List<Function(AutoAdd value)> onAutoAddRemoved = [];
+  final List<Function(AutoAdd value)> onAutoAddChanged = [];
 
   final List<BankAccount> bankAccounts = [];
   final List<AutoAdd> autoAdds = [];
@@ -37,6 +37,7 @@ class DataProvider {
     });
   }
 
+  //Add
   Future<void> addBankAccount(BankAccount b) async {
     return remoteDataService.bankAccountsReference.push().set(b.toMap());
   }
@@ -53,6 +54,7 @@ class DataProvider {
     return remoteDataService.categoriesRefernece.push().set(c.toMap());
   }
 
+  //Remove
   Future<void> removeBankAccount(BankAccount b){
     return remoteDataService.bankAccountsReference.child(b.id).remove();
   }
@@ -69,13 +71,18 @@ class DataProvider {
     return remoteDataService.categoriesRefernece.child(c.id).remove();
   }
 
+  //Change
+  Future<void> changeCategory(Category c){
+    return remoteDataService.categoriesRefernece.child(c.id).update(c.toMap());
+  }
+
   void _setupOnAdded() {
     remoteDataService.autoAddsReference.onChildAdded.listen((event) {
       var autoAdd = AutoAdd.fromSnapshot(event.snapshot);
       autoAdds.add(autoAdd);
 
       onAutoAddAdded.forEach((e) {
-        e();
+        e(autoAdd);
       });
     });
 
@@ -84,7 +91,7 @@ class DataProvider {
       bankAccounts.add(bankAccount);
 
       onBankAccountAdded.forEach((e) {
-        e();
+        e(bankAccount);
       });
     });
 
@@ -93,7 +100,7 @@ class DataProvider {
       bills.add(bill);
 
       onBillAdded.forEach((e) {
-        e();
+        e(bill);
       });
     });
 
@@ -102,7 +109,7 @@ class DataProvider {
       categories.add(category);
 
       onCategoryAdded.forEach((e) {
-        e();
+        e(category);
       });
     });
   }
@@ -118,7 +125,7 @@ class DataProvider {
       }
 
       onAutoAddChanged.forEach((e) {
-        e();
+        e(autoAdd);
       });
     });
 
@@ -132,7 +139,7 @@ class DataProvider {
       }
 
       onBankAccountChanged.forEach((e) {
-        e();
+        e(bankAccount);
       });
     });
 
@@ -146,7 +153,7 @@ class DataProvider {
       }
 
       onBillChanged.forEach((e) {
-        e();
+        e(bill);
       });
     });
 
@@ -160,17 +167,52 @@ class DataProvider {
       }
 
       onCategoryChanged.forEach((e) {
-        e();
+        e(category);
       });
     });
   }
 
   void _setupOnRemoved() {
-    remoteDataService.autoAddsReference.onChildRemoved.listen((event) {});
+    remoteDataService.autoAddsReference.onChildRemoved.listen((event) {
+      var autoAdd = AutoAdd.fromSnapshot(event.snapshot);
+      for(var currentAutoAdd in autoAdds){
+        if(currentAutoAdd.id == autoAdd.id){
+          autoAdds.remove(currentAutoAdd);
+          break;
+        }
+      }
 
-    remoteDataService.bankAccountsReference.onChildRemoved.listen((event) {});
+      onAutoAddRemoved.forEach((a){
+        a(autoAdd);
+      });
+    });
 
-    remoteDataService.billsReference.onChildRemoved.listen((event) {});
+    remoteDataService.bankAccountsReference.onChildRemoved.listen((event) {
+      var bankAccount = BankAccount.fromSnapshot(event.snapshot);
+      for(var currentBankAccount in bankAccounts){
+        if(currentBankAccount.id ==  bankAccount.id){
+          bankAccounts.remove(currentBankAccount);
+          break;
+        }
+      }
+
+      onBankAccountRemoved.forEach((b){
+        b(bankAccount);
+      });
+    });
+
+    remoteDataService.billsReference.onChildRemoved.listen((event) {
+      var bill = Bill.fromSnapshot(event.snapshot);
+      for(var currentBill in bills){
+        if(currentBill.id == bill.id){
+          bills.remove(currentBill);
+        }
+      }
+
+      onBillRemoved.forEach((b){
+        b(bill);
+      });
+    });
 
     remoteDataService.categoriesRefernece.onChildRemoved.listen((event) {
       var category = Category.fromSnapshot(event.snapshot);
@@ -182,7 +224,7 @@ class DataProvider {
       }
 
       onCategoryRemoved.forEach((c){
-        c();
+        c(category);
       });
     });
   }

@@ -11,11 +11,6 @@ class BankAccount {
 
   Map<String, dynamic> toMap() => {"name": name, "balance": balance};
 
-  static BankAccount findById(List<BankAccount> bankAccounts, String id) {
-    bankAccounts.forEach((bankAccount) {
-      if (bankAccount.id == id) {
-        return bankAccount;
-      }
-    });
-  }
+  static BankAccount findById(List<BankAccount> bankAccounts, String id) =>
+      bankAccounts.firstWhere((bankAccount) => bankAccount.id == id);
 }

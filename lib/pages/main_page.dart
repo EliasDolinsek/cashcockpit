@@ -7,7 +7,9 @@ import '../core/data/data_provider.dart';
 
 class MainPage extends StatefulWidget {
 
-  final DataProvider dataProvider = DataProvider();
+  final DataProvider dataProvider;
+
+  MainPage(this.dataProvider);
 
   @override
   State<StatefulWidget> createState() {
