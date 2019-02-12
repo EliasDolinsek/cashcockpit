@@ -6,8 +6,12 @@ import './pages/sign_in_option_page.dart';
 import './pages/sign_in_page.dart';
 import './pages/sign_up_page.dart';
 
+import './pages/bank_account_page.dart';
 import './pages/category_page.dart';
+
 import './core/category.dart';
+import './core/bank_account.dart';
+
 import './core/data/data_provider.dart';
 
 void main() {
@@ -33,18 +37,31 @@ class CashCockpit extends StatelessWidget {
         "/sign_up": (context) => SignUpPage(),
         "/category": (context) =>
             CategoryPage(Category(Goal()), false, dataProvider),
+        "/bank_account": (context) =>
+            BankAccountPage(BankAccount(), false, dataProvider),
       },
       onGenerateRoute: (RouteSettings settings) {
         final List<String> pathElements = settings.name.split('/');
+        String direction = pathElements[1];
         if (pathElements[0] != '') {
           return null;
-        } else if (pathElements[1] == 'category') {
-          final category = Category.findById(dataProvider.categories, pathElements[2]);
-          return MaterialPageRoute<bool>(
-            builder: (BuildContext context) => CategoryPage(
-                category,
-                true,
-                dataProvider),
+        } else if (direction == 'category') {
+          final category = Category.findById(
+              dataProvider.categories, pathElements[2]);
+          return MaterialPageRoute(
+            builder: (context) =>
+                CategoryPage(
+                    category,
+                    true,
+                    dataProvider),
+          );
+        } else if (direction == "bank_account") {
+          final bankAccount = BankAccount.findById(
+              dataProvider.bankAccounts, pathElements[2]);
+          return MaterialPageRoute(
+              builder: (context) =>
+                  BankAccountPage(bankAccount, true, dataProvider)
+
           );
         }
         return null;

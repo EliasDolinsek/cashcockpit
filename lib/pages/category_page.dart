@@ -4,7 +4,6 @@ import '../core/category.dart';
 import '../core/data/data_provider.dart';
 
 class CategoryPage extends StatefulWidget {
-
   final DataProvider dataProvider;
   Category category;
   final bool editMode;
@@ -49,7 +48,8 @@ class _CategoryPageState extends State<CategoryPage> {
             context: context,
             builder: (context) => AlertDialog(
                   title: Text("Category got deleted"),
-                  content: Text("${widget.category.name} got deleted on another device"),
+                  content: Text(
+                      "${widget.category.name} got deleted on another device"),
                   actions: <Widget>[
                     MaterialButton(
                       child: Text("Close"),
@@ -65,17 +65,17 @@ class _CategoryPageState extends State<CategoryPage> {
   }
 
   void _setupTextController() {
-    _nameController = TextEditingController(text: widget.category.name);
-    _goalAmountController = TextEditingController(
-        text: widget.category.goal.amount != null
-            ? widget.category.goal.amount.toString()
-            : "");
+    _nameController = TextEditingController(
+        text: widget.editMode ? widget.category.name : "");
+    _goalAmountController =
+        TextEditingController(text: widget.category.goal.amount.toString());
   }
 
   @override
   void dispose() {
     super.dispose();
     widget.dataProvider.onCategoryChanged.remove(_onCategoryChanged);
+    widget.dataProvider.onCategoryRemoved.remove(_onCategoryRemoved);
   }
 
   @override
@@ -87,7 +87,7 @@ class _CategoryPageState extends State<CategoryPage> {
       ),
       body: Padding(
         padding: EdgeInsets.all(16.0),
-        child: Column(
+        child: ListView(
           children: <Widget>[
             TextField(
                 controller: _nameController,
