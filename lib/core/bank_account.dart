@@ -1,6 +1,7 @@
 import 'package:firebase_database/firebase_database.dart';
 
 class BankAccount {
+
   String id, name;
   double balance;
   bool balanceEnabled;

@@ -4,6 +4,10 @@ import '../bank_account.dart';
 import '../autoadd.dart';
 import '../category.dart';
 import '../bill.dart';
+import '../group.dart';
+import '../preset.dart';
+
+import '../settings/settings.dart';
 
 class DataProvider {
   final List<Function(Category value)> onCategoryAdded = [];
@@ -22,10 +26,24 @@ class DataProvider {
   final List<Function(AutoAdd value)> onAutoAddRemoved = [];
   final List<Function(AutoAdd value)> onAutoAddChanged = [];
 
+  final List<Function(Group value)> onGroupAdded = [];
+  final List<Function(Group value)> onGroupRemoved = [];
+  final List<Function(Group value)> onGroupChanged = [];
+
+  final List<Function(Preset value)> onPresetAdded = [];
+  final List<Function(Preset value)> onPresetRemoved = [];
+  final List<Function(Preset value)> onPresetChanged = [];
+  
+  final List<Function(Settings value)> onSettingsChanged = [];
+
   final List<BankAccount> bankAccounts = [];
   final List<AutoAdd> autoAdds = [];
   final List<Category> categories = [];
   final List<Bill> bills = [];
+  final List<Group> groups = [];
+  final List<Preset> presets = [];
+  
+  Settings settings;
 
   RemoteDataService remoteDataService = RemoteDataService();
 
@@ -54,6 +72,18 @@ class DataProvider {
     return remoteDataService.categoriesRefernece.push().set(c.toMap());
   }
 
+  Future<void> addGroup(Group g) async {
+    return remoteDataService.groupsReference.push().set(g.toMap());
+  }
+
+  Future<void> addPreset(Preset p) async {
+    return remoteDataService.presetsReference.push().set(p.toMap());
+  }
+
+  Future<void> setSettings(Settings s) async {
+    return remoteDataService.settingsReference.set(s.toMap());
+  }
+
   //Remove
   Future<void> removeBankAccount(BankAccount b){
     return remoteDataService.bankAccountsReference.child(b.id).remove();
@@ -71,12 +101,37 @@ class DataProvider {
     return remoteDataService.categoriesRefernece.child(c.id).remove();
   }
 
+  Future<void> removeGroup(Group g){
+    return remoteDataService.groupsReference.child(g.id).remove();
+  }
+
+  Future<void> removePreset(Preset p) async {
+    return remoteDataService.presetsReference.child(p.id).remove();
+  }
+
   //Change
   Future<void> changeCategory(Category c){
     return remoteDataService.categoriesRefernece.child(c.id).update(c.toMap());
   }
 
+  Future<void> changeBankAccount(BankAccount b){
+    return remoteDataService.bankAccountsReference.child(b.id).update(b.toMap());
+  }
+
+  Future<void> changeGroup(Group g){
+    return remoteDataService.groupsReference.child(g.id).update(g.toMap());
+  }
+
+  Future<void> changePreset(Preset p){
+    return remoteDataService.presetsReference.child(p.id).update(p.toMap());
+  }
+
+  //On added
   void _setupOnAdded() {
+    remoteDataService.settingsReference.onChildAdded.listen((event){
+      settings = Settings.fromSnapshot(event.snapshot);
+    });
+    
     remoteDataService.autoAddsReference.onChildAdded.listen((event) {
       var autoAdd = AutoAdd.fromSnapshot(event.snapshot);
       autoAdds.add(autoAdd);
@@ -112,9 +167,34 @@ class DataProvider {
         e(category);
       });
     });
+
+    remoteDataService.groupsReference.onChildAdded.listen((event){
+      var group = Group.fromSnapshot(event.snapshot);
+      groups.add(group);
+
+      onGroupAdded.forEach((e){
+        e(group);
+      });
+    });
+
+    remoteDataService.presetsReference.onChildAdded.listen((event){
+      var preset = Preset.fromSnapshot(event.snapshot);
+      presets.add(preset);
+
+      onPresetAdded.forEach((e){
+        e(preset);
+      });
+    });
   }
 
   void _setupOnChanged() {
+    remoteDataService.settingsReference.onChildChanged.listen((event){
+      settings = Settings.fromSnapshot(event.snapshot);
+      onSettingsChanged.forEach((f){
+        f(settings);
+      });
+    });
+    
     remoteDataService.autoAddsReference.onChildChanged.listen((event) {
       var autoAdd = AutoAdd.fromSnapshot(event.snapshot);
       for (int i = 0; i < autoAdds.length; i++) {
@@ -168,6 +248,34 @@ class DataProvider {
 
       onCategoryChanged.forEach((e) {
         e(category);
+      });
+    });
+
+    remoteDataService.groupsReference.onChildChanged.listen((event){
+      var group = Group.fromSnapshot(event.snapshot);
+      for(int i = 0; i < groups.length; i++){
+        if(groups.elementAt(i).id == group.id){
+          groups.removeAt(i);
+          groups.insert(i, group);
+        }
+      }
+
+      onGroupChanged.forEach((e){
+        e(group);
+      });
+    });
+
+    remoteDataService.presetsReference.onChildChanged.listen((event){
+      var preset = Preset.fromSnapshot(event.snapshot);
+      for(int i = 0; i < presets.length; i++){
+        if(presets.elementAt(i).id == preset.id){
+          presets.removeAt(i);
+          presets.insert(i, preset);
+        }
+      }
+
+      onPresetChanged.forEach((e){
+        e(preset);
       });
     });
   }
@@ -225,6 +333,34 @@ class DataProvider {
 
       onCategoryRemoved.forEach((c){
         c(category);
+      });
+    });
+
+    remoteDataService.groupsReference.onChildRemoved.listen((event){
+      var group = Group.fromSnapshot(event.snapshot);
+      for(var currentGroup in groups){
+        if(currentGroup.id == group.id){
+          groups.remove(group);
+          break;
+        }
+      }
+
+      onGroupRemoved.forEach((e){
+        e(group);
+      });
+    });
+    
+    remoteDataService.presetsReference.onChildRemoved.listen((event){
+      var preset = Preset.fromSnapshot(event.snapshot);
+      for(var currentPreset in presets){
+        if(currentPreset.id == preset.id){
+          presets.remove(preset);
+          break;
+        }
+      }
+
+      onPresetRemoved.forEach((e){
+        e(preset);
       });
     });
   }

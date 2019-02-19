@@ -20,15 +20,16 @@ class Bill {
       this.categoryId,
       this.bankAccountId});
 
-  factory Bill.fromSnapshot(DataSnapshot s) => Bill(
-        id: s.key,
-        description: s.value["description"],
-        imageUrl: s.value["imageUrl"],
-        amount: s.value["amount"],
-        type: s.value["type"],
-        categoryId: s.value["categoryId"],
-        bankAccountId: s.value["bankAccountId"],
-      );
+  factory Bill.fromSnapshot(DataSnapshot s, {bool useSubMap = false, String subMapCode = "bill"}) {
+    Map<dynamic, dynamic> billMap = useSubMap ? s.value[subMapCode] : s.value;
+    return Bill(
+        description: billMap["description"],
+        imageUrl: billMap["imageUrl"],
+        amount: billMap["amount"],
+        type: billMap["type"],
+        categoryId: billMap["categoryID"],
+        bankAccountId: billMap["billMap"]);
+  }
 
   Map<String, dynamic> toMap() => {
         "description": description,

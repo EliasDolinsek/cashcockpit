@@ -5,10 +5,14 @@ class RemoteDataService {
   DatabaseReference categoriesRefernece,
       bankAccountsReference,
       billsReference,
-      autoAddsReference;
+      autoAddsReference,
+      groupsReference,
+      presetsReference,
+      settingsReference;
+
   FirebaseDatabase _firebaseDatabase = FirebaseDatabase.instance;
 
-  RemoteDataService(){
+  RemoteDataService() {
     _firebaseDatabase.setPersistenceEnabled(true);
   }
 
@@ -17,11 +21,23 @@ class RemoteDataService {
 
     categoriesRefernece =
         _firebaseDatabase.reference().child("categories").child(user.uid);
+
     bankAccountsReference =
         _firebaseDatabase.reference().child("bankAccounts").child(user.uid);
+
     billsReference =
         _firebaseDatabase.reference().child("bills").child(user.uid);
+
     autoAddsReference =
         _firebaseDatabase.reference().child("autoAdds").child(user.uid);
+
+    groupsReference =
+        _firebaseDatabase.reference().child("groups").child(user.uid);
+
+    presetsReference =
+        _firebaseDatabase.reference().child("presets").child(user.uid);
+
+    settingsReference =
+        _firebaseDatabase.reference().child("settings").child(user.uid);
   }
 }

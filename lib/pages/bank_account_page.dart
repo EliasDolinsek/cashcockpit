@@ -4,6 +4,7 @@ import '../core/data/data_provider.dart';
 import '../core/bank_account.dart';
 
 class BankAccountPage extends StatefulWidget {
+
   final DataProvider dataProvider;
   BankAccount bankAccount;
   final bool editMode;
@@ -132,7 +133,7 @@ class _BankAccountPageState extends State<BankAccountPage> {
                 ),
                 SwitchListTile(
                   value: widget.bankAccount.balanceEnabled,
-                  title: Text("Enable Goal"),
+                  title: Text("Enable Balance"),
                   onChanged: (value) {
                     setState(
                       () {
@@ -158,7 +159,7 @@ class _BankAccountPageState extends State<BankAccountPage> {
                             widget.dataProvider.onBankAccountChanged
                                 .remove(_onBankAccountChanged);
                             widget.dataProvider
-                                .addBankAccount(widget.bankAccount);
+                                .changeBankAccount(widget.bankAccount);
                           } else {
                             widget.dataProvider
                                 .addBankAccount(widget.bankAccount);
