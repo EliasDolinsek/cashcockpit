@@ -19,14 +19,13 @@ class Category {
 class Goal {
   
   double amount;
-  bool enabled;
 
-  Goal({this.amount = 0, this.enabled = false});
+  Goal({this.amount = 0});
 
   factory Goal.fromSnapshot(DataSnapshot s, {bool useSubMap = false, String subMapCode = "goal"}) {
     Map<dynamic, dynamic> goalMap = useSubMap ? s.value[subMapCode] : s.value;
-    return Goal(amount: double.parse(goalMap["amount"].toString()), enabled: goalMap["enabled"]);
+    return Goal(amount: double.parse(goalMap["amount"].toString()));
   }
 
-  Map<String, dynamic> toMap() => {"amount": amount, "enabled": enabled};
+  Map<String, dynamic> toMap() => {"amount": amount};
 }

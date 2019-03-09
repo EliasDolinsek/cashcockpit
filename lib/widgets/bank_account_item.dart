@@ -1,12 +1,16 @@
+import 'package:cash_cockpit/core/settings/settings.dart';
 import 'package:flutter/material.dart';
 
+import '../core/currency/currency.dart';
 import '../core/bank_account.dart';
 
 class BankAccountItem extends StatelessWidget {
+
   final BankAccount bankAccount;
   final Function onDelete;
+  final Settings settings;
 
-  BankAccountItem(this.bankAccount, this.onDelete);
+  BankAccountItem(this.bankAccount, this.onDelete, this.settings);
 
   @override
   Widget build(BuildContext context) {
@@ -23,8 +27,8 @@ class BankAccountItem extends StatelessWidget {
           children: <Widget>[
             Chip(
               label: Text(
-                bankAccount.balanceEnabled
-                    ? "${bankAccount.balance}\$"
+                bankAccount.balance != 0
+                    ? CurrencyFormatter.formatAmount(bankAccount.balance, settings)
                     : "No balance",
                 style: TextStyle(color: Colors.white),
               ),

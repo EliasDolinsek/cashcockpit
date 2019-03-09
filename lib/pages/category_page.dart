@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../core/category.dart';
 import '../core/data/data_provider.dart';
+import '../core/currency/currency.dart';
 
 class CategoryPage extends StatefulWidget {
   final DataProvider dataProvider;
@@ -18,6 +19,7 @@ class CategoryPage extends StatefulWidget {
 
 class _CategoryPageState extends State<CategoryPage> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
+
   TextEditingController _nameController;
   TextEditingController _goalAmountController;
 
@@ -67,8 +69,9 @@ class _CategoryPageState extends State<CategoryPage> {
   void _setupTextController() {
     _nameController = TextEditingController(
         text: widget.editMode ? widget.category.name : "");
-    _goalAmountController =
-        TextEditingController(text: widget.category.goal.amount.toString());
+    _goalAmountController = CurrencyFormatter.getCurrencyTextController(
+        widget.dataProvider.settings,
+        text: widget.category.goal.amount.toString());
   }
 
   @override
@@ -103,7 +106,6 @@ class _CategoryPageState extends State<CategoryPage> {
             ),
             TextField(
               controller: _goalAmountController,
-              enabled: widget.category.goal.enabled,
               decoration: InputDecoration(
                 labelText: "Goal Amount",
                 border: OutlineInputBorder(),
@@ -119,17 +121,6 @@ class _CategoryPageState extends State<CategoryPage> {
             ),
             SizedBox(
               height: 8,
-            ),
-            SwitchListTile(
-              value: widget.category.goal.enabled,
-              title: Text("Enable Goal"),
-              onChanged: (value) {
-                setState(
-                  () {
-                    widget.category.goal.enabled = value;
-                  },
-                );
-              },
             ),
             SizedBox(
               height: 16,

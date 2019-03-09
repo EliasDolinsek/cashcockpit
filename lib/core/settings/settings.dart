@@ -40,9 +40,7 @@ class Settings {
       centSeparatorSymbol: s.value["centSeparatorSymbol"],
       thousandSeparatorSymbol: s.value["thousandSeparatorSymbol"]);
 
-  static String getCentSeparator(Settings s) =>
-      s.centSeparatorSymbol == SEPARATOR_COMMA ? "," : ".";
+  String get centSeparator => centSeparatorSymbol == SEPARATOR_COMMA ? "," : ".";
+  String get thousandSeparator => thousandSeparatorSymbol == SEPARATOR_COMMA ? "," : ".";
 
-  static String getThousandSeparator(Settings s) =>
-      s.thousandSeparatorSymbol == SEPARATOR_COMMA ? "," : ".";
 }

@@ -6,6 +6,7 @@ import '../widgets/bank_account_item.dart';
 import '../core/data/data_provider.dart';
 
 class DatabaseLayout extends StatelessWidget {
+
   final DataProvider dataProvider;
 
   DatabaseLayout(this.dataProvider);
@@ -14,7 +15,7 @@ class DatabaseLayout extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: DefaultTabController(
-        length: 3,
+        length: 4,
         child: Scaffold(
           appBar: AppBar(
             title: Text("CashCockpit"),
@@ -22,6 +23,10 @@ class DatabaseLayout extends StatelessWidget {
               Tab(
                 text: "Categories",
                 icon: Icon(Icons.category),
+              ),
+              Tab(
+                text: "Groups",
+                icon: Icon(Icons.view_column),
               ),
               Tab(
                 text: "AutoAdds",
@@ -35,6 +40,7 @@ class DatabaseLayout extends StatelessWidget {
           ),
           body: TabBarView(children: [
             _CategoriesList(dataProvider),
+            Text("Groups"),
             Text("AutoAdds"),
             _BankAccountList(dataProvider),
           ]),
@@ -160,7 +166,7 @@ class _BankAccountListState extends State<_BankAccountList> {
                     widget.dataProvider.removeBankAccount(
                         widget.dataProvider.bankAccounts.elementAt(index));
                   });
-                }),
+                }, widget.dataProvider.settings),
               ),
           separatorBuilder: (context, index) => Divider(),
           itemCount: widget.dataProvider.bankAccounts.length),

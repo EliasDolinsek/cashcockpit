@@ -75,7 +75,7 @@ class _BankAccountPageState extends State<BankAccountPage> {
   void _setupTextController() {
     _nameController = TextEditingController(
         text: widget.editMode ? widget.bankAccount.name : "");
-    _balanceController = CurrencyFormatter.getCurrencyTextController(widget.dataProvider.settings);
+    _balanceController = CurrencyFormatter.getCurrencyTextController(widget.dataProvider.settings, text: widget.bankAccount.balance.toString());
   }
 
   @override
@@ -120,14 +120,17 @@ class _BankAccountPageState extends State<BankAccountPage> {
                   decoration: InputDecoration(
                       border: OutlineInputBorder(), labelText: "Balance"),
                   validator: (value) {
+                    var errorCode;
                     try {
-                      _balance = double.parse(value);
+                      _balance = CurrencyFormatter.getAmountInputAsDouble(value, widget.dataProvider.settings);
                     } on Exception {
-                      return "Please enter a valid balance";
+                      errorCode = "Please enter a valid balance";
                     }
+
+                    return errorCode;
                   },
                   onSaved: (value) {
-                    _balance = double.parse(value);
+                    _balance = CurrencyFormatter.getAmountInputAsDouble(value, widget.dataProvider.settings);
                   },
                 ),
                 SizedBox(
