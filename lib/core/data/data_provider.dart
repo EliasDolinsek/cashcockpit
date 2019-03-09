@@ -52,7 +52,6 @@ class DataProvider {
       _setupOnAdded();
       _setupOnChanged();
       _setupOnRemoved();
-      setSettings(Settings(centSeparatorSymbol: Settings.SEPARATOR_POINT, thousandSeparatorSymbol: Settings.SEPARATOR_POINT, currencyISOCode: "EUR", pin: 1234));
     });
   }
 
@@ -82,7 +81,7 @@ class DataProvider {
   }
 
   Future<void> setSettings(Settings s) async {
-    return remoteDataService.settingsReference.set(s.toMap());
+    return remoteDataService.settingsReference.child(s.id).set(s.toMap());
   }
 
   //Remove

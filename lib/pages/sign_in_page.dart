@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+import '../core/sing_up_toolbox.dart';
+
 import '../tools/auth.dart';
 
 class SignInPage extends StatelessWidget {
@@ -84,15 +86,17 @@ class _SignInInputsState extends State<_SignInInputs> {
           ),
           RaisedButton(
             child: Text("SIGN IN"),
-            onPressed: _signInProcessActive ? null : () {
-              if (_key.currentState.validate()) {
-                _key.currentState.save();
-                _signInUser();
-                setState(() {
-                  _signInProcessActive = true;
-                });
-              }
-            },
+            onPressed: _signInProcessActive
+                ? null
+                : () {
+                    if (_key.currentState.validate()) {
+                      _key.currentState.save();
+                      _signInUser();
+                      setState(() {
+                        _signInProcessActive = true;
+                      });
+                    }
+                  },
             color: Theme.of(context).accentColor,
             textColor: Colors.white,
           ),
@@ -116,14 +120,16 @@ class _SignInInputsState extends State<_SignInInputs> {
   }
 
   void _signInUser() async {
-    await Auth().signInUser(_email, _password).catchError((e) {
+    try {
+      await Auth().signInUser(_email, _password);
+      Navigator.pushReplacementNamed(context, "/main");
+    } catch (e) {
       if (e is PlatformException) {
         setState(() {
-          _errorMessage = e.code;
+          _errorMessage = SignUpToolbox.getErrorMessageOfErrorCode(e.code);
+          _signInProcessActive = false;
         });
       }
-    }).whenComplete((){
-      Navigator.pushReplacementNamed(context, "/main");
-    });
+    }
   }
 }

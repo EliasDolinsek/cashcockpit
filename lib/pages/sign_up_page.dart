@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../core/sing_up_toolbox.dart';
 import '../tools/auth.dart';
 
 class SignUpPage extends StatelessWidget {
@@ -141,7 +142,8 @@ class _SignUpInputsState extends State<_SignUpInputs> {
     } catch (e) {
       if (e is PlatformException) {
         setState(() {
-          _errorMessage = e.message;
+          _errorMessage = SignUpToolbox.getErrorMessageOfErrorCode(e.code);
+          _signUpProcessActive = false;
         });
       }
     }

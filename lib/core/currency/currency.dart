@@ -26,7 +26,7 @@ class Currency {
 
 class CurrencyFormatter {
   static TextEditingController getCurrencyTextController(Settings s,
-      {String text = ""}) {
+      {String text = "0.0"}) {
     var alignCurrencySymbolRight =
         s.currency.currencySymbolAlignment == CurrencySymbolAlignment.RIGHT;
     var currencySymbol = s.currency.currencySymbol;

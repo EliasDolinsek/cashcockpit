@@ -38,7 +38,7 @@ class _MainPageState extends State<MainPage> {
   void _showSignInOptionsPageIfUserIsNotAuthenticated(
       BuildContext context) async {
     final FirebaseUser user = await FirebaseAuth.instance.currentUser();
-
+    FirebaseAuth.instance.signOut();
     if (user == null) {
       Navigator.pushReplacementNamed(context, "/sign_in_options");
     } else {
