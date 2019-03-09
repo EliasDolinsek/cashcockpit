@@ -52,6 +52,7 @@ class DataProvider {
       _setupOnAdded();
       _setupOnChanged();
       _setupOnRemoved();
+      setSettings(Settings(centSeparatorSymbol: Settings.SEPARATOR_POINT, thousandSeparatorSymbol: Settings.SEPARATOR_POINT, currencyISOCode: "EUR", pin: 1234));
     });
   }
 
@@ -126,10 +127,18 @@ class DataProvider {
     return remoteDataService.presetsReference.child(p.id).update(p.toMap());
   }
 
+  Future<void> changeSettings(Settings s){
+    return remoteDataService.settingsReference.update(s.toMap());
+  }
+
   //On added
   void _setupOnAdded() {
     remoteDataService.settingsReference.onChildAdded.listen((event){
       settings = Settings.fromSnapshot(event.snapshot);
+
+      onSettingsChanged.forEach((s){
+        s(settings);
+      });
     });
     
     remoteDataService.autoAddsReference.onChildAdded.listen((event) {

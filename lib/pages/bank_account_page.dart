@@ -1,7 +1,10 @@
+import 'package:cash_cockpit/core/settings/settings.dart';
 import 'package:flutter/material.dart';
 
 import '../core/data/data_provider.dart';
 import '../core/bank_account.dart';
+
+import '../core/currency/currency.dart';
 
 class BankAccountPage extends StatefulWidget {
 
@@ -72,8 +75,7 @@ class _BankAccountPageState extends State<BankAccountPage> {
   void _setupTextController() {
     _nameController = TextEditingController(
         text: widget.editMode ? widget.bankAccount.name : "");
-    _balanceController =
-        TextEditingController(text: widget.bankAccount.balance.toString());
+    _balanceController = CurrencyFormatter.getCurrencyTextController(widget.dataProvider.settings);
   }
 
   @override
