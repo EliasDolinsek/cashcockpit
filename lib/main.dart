@@ -8,9 +8,11 @@ import './pages/sign_up_page.dart';
 
 import './pages/bank_account_page.dart';
 import './pages/category_page.dart';
+import './pages/group_page.dart';
 
 import './core/category.dart';
 import './core/bank_account.dart';
+import './core/group.dart';
 
 import './core/data/data_provider.dart';
 
@@ -39,6 +41,7 @@ class CashCockpit extends StatelessWidget {
             CategoryPage(Category(Goal()), false, dataProvider),
         "/bank_account": (context) =>
             BankAccountPage(BankAccount(), false, dataProvider),
+        "/group": (context) => GroupPage(Group([]), false, dataProvider),
       },
       onGenerateRoute: (RouteSettings settings) {
         final List<String> pathElements = settings.name.split('/');

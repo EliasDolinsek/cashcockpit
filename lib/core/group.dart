@@ -1,14 +1,13 @@
 import 'package:firebase_database/firebase_database.dart';
 
 class Group {
-
   String id, name;
-  List<String> categoryIDs;
+  List<dynamic> categoryIDs;
 
-  Group({this.id, this.name = "New Group", this.categoryIDs = const []});
+  Group(this.categoryIDs, {this.id, this.name = "New Group"});
 
-  factory Group.fromSnapshot(DataSnapshot s) => Group(
-      id: s.key, name: s.value["name"], categoryIDs: s.value["categoryIDs"]);
+  factory Group.fromSnapshot(DataSnapshot s) =>
+      Group(s.value["categoryIDs"], id: s.key, name: s.value["name"]);
 
-  Map<String, dynamic> toMap() => {"name":name, "categoryIDs":categoryIDs};
+  Map<String, dynamic> toMap() => {"name": name, "categoryIDs": categoryIDs};
 }

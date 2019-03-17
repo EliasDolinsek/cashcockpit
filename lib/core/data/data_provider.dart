@@ -55,6 +55,44 @@ class DataProvider {
     });
   }
 
+  //Listeners
+  void addCategoryEventListener(Function f(c)){
+    onCategoryAdded.add(f);
+    onCategoryRemoved.add(f);
+    onCategoryChanged.add(f);
+  }
+
+  void removeCategoryEventListener(Function f(c)){
+    onCategoryAdded.remove(f);
+    onCategoryRemoved.remove(f);
+    onCategoryChanged.remove(f);
+  }
+
+  void addBankAccountEventListener(Function f(b)){
+    onBankAccountAdded.add(f);
+    onBankAccountRemoved.add(f);
+    onBankAccountRemoved.add(f);
+  }
+
+  void removeBankAccountEventListener(Function f(b)){
+    onBankAccountAdded.remove(f);
+    onBankAccountRemoved.remove(f);
+    onBankAccountRemoved.remove(f);
+  }
+
+  void addGroupEventListener(Function f(g)){
+    onGroupAdded.add(f);
+    onGroupRemoved.add(f);
+    onGroupChanged.add(f);
+  }
+
+  void removeGroupEventListener(Function f(b)){
+    onGroupAdded.remove(f);
+    onGroupRemoved.remove(f);
+    onGroupChanged.remove(f);
+  }
+
+
   //Add
   Future<void> addBankAccount(BankAccount b) async {
     return remoteDataService.bankAccountsReference.push().set(b.toMap());

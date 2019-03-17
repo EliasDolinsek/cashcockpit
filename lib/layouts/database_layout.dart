@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 
 import '../widgets/category_item.dart';
 import '../widgets/bank_account_item.dart';
+import '../widgets/group_item.dart';
 
 import '../core/data/data_provider.dart';
 
 class DatabaseLayout extends StatelessWidget {
-
   final DataProvider dataProvider;
 
   DatabaseLayout(this.dataProvider);
@@ -40,7 +40,7 @@ class DatabaseLayout extends StatelessWidget {
           ),
           body: TabBarView(children: [
             _CategoriesList(dataProvider),
-            Text("Groups"),
+            _GroupList(dataProvider),
             Text("AutoAdds"),
             _BankAccountList(dataProvider),
           ]),
@@ -72,17 +72,13 @@ class _CategoriesListState extends State<_CategoriesList> {
       setState(() {});
     };
 
-    widget.dataProvider.onCategoryAdded.add(_onCategoryChange);
-    widget.dataProvider.onCategoryRemoved.add(_onCategoryChange);
-    widget.dataProvider.onCategoryChanged.add(_onCategoryChange);
+    widget.dataProvider.addCategoryEventListener(_onCategoryChange);
   }
 
   @override
   void dispose() {
     super.dispose();
-    widget.dataProvider.onCategoryAdded.remove(_onCategoryChange);
-    widget.dataProvider.onCategoryRemoved.remove(_onCategoryChange);
-    widget.dataProvider.onCategoryChanged.remove(_onCategoryChange);
+    widget.dataProvider.removeCategoryEventListener(_onCategoryChange);
   }
 
   @override
@@ -125,8 +121,8 @@ class _BankAccountList extends StatefulWidget {
 }
 
 class _BankAccountListState extends State<_BankAccountList> {
-
   Function _onBankAccountChange;
+
   @override
   void initState() {
     super.initState();
@@ -135,19 +131,15 @@ class _BankAccountListState extends State<_BankAccountList> {
       setState(() {});
     };
 
-    widget.dataProvider.onBankAccountAdded.add(_onBankAccountChange);
-    widget.dataProvider.onBankAccountRemoved.add(_onBankAccountChange);
-    widget.dataProvider.onBankAccountChanged.add(_onBankAccountChange);
+    widget.dataProvider.addBankAccountEventListener(_onBankAccountChange);
   }
 
   @override
   void dispose() {
     super.dispose();
-    widget.dataProvider.onBankAccountAdded.remove(_onBankAccountChange);
-    widget.dataProvider.onBankAccountRemoved.remove(_onBankAccountChange);
-    widget.dataProvider.onBankAccountChanged.remove(_onBankAccountChange);
+    widget.dataProvider.removeCategoryEventListener(_onBankAccountChange);
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -170,6 +162,61 @@ class _BankAccountListState extends State<_BankAccountList> {
               ),
           separatorBuilder: (context, index) => Divider(),
           itemCount: widget.dataProvider.bankAccounts.length),
+    );
+  }
+}
+
+class _GroupList extends StatefulWidget {
+  final DataProvider dataProvider;
+
+  _GroupList(this.dataProvider);
+
+  @override
+  State<StatefulWidget> createState() {
+    return _GroupListState();
+  }
+}
+
+class _GroupListState extends State<_GroupList> {
+  Function _onGroupChange;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _onGroupChange = (g) {
+      setState(() {});
+    };
+
+    widget.dataProvider.addGroupEventListener(_onGroupChange);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    widget.dataProvider.removeGroupEventListener(_onGroupChange);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.pushNamed(context, "/group");
+        },
+        child: Icon(Icons.add),
+      ),
+      body: ListView.separated(
+        padding: EdgeInsets.symmetric(vertical: 8.0),
+          itemBuilder: (context, index) =>
+              GroupItem(widget.dataProvider.groups.elementAt(index), () {
+                setState(() {
+                  widget.dataProvider
+                      .removeGroup(widget.dataProvider.groups.elementAt(index));
+                });
+              }, widget.dataProvider.settings),
+          separatorBuilder: (context, index) => Divider(),
+          itemCount: widget.dataProvider.groups.length),
     );
   }
 }

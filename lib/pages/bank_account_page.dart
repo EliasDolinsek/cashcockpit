@@ -1,4 +1,3 @@
-import 'package:cash_cockpit/core/settings/settings.dart';
 import 'package:flutter/material.dart';
 
 import '../core/data/data_provider.dart';
@@ -116,7 +115,6 @@ class _BankAccountPageState extends State<BankAccountPage> {
                 ),
                 TextFormField(
                   controller: _balanceController,
-                  enabled: widget.bankAccount.balanceEnabled,
                   decoration: InputDecoration(
                       border: OutlineInputBorder(), labelText: "Balance"),
                   validator: (value) {

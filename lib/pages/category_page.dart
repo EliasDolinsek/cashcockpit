@@ -5,6 +5,7 @@ import '../core/data/data_provider.dart';
 import '../core/currency/currency.dart';
 
 class CategoryPage extends StatefulWidget {
+
   final DataProvider dataProvider;
   Category category;
   final bool editMode;
@@ -99,7 +100,9 @@ class _CategoryPageState extends State<CategoryPage> {
                   border: OutlineInputBorder(),
                 ),
                 onChanged: (value) {
-                  widget.category.name = value;
+                  setState(() {
+                    widget.category.name = value;
+                  });
                 }),
             SizedBox(
               height: 8,
@@ -112,15 +115,23 @@ class _CategoryPageState extends State<CategoryPage> {
               ),
               onChanged: (value) {
                 try {
-                  widget.category.goal.amount = double.parse(value);
+                  widget.category.goal.amount = CurrencyFormatter.getAmountInputAsDouble(value, widget.dataProvider.settings);
                 } on Exception {
-                  //TODO
-                  print("Invalid Goal-Amount");
+                  Navigator.pop(context);
                 }
               },
             ),
             SizedBox(
               height: 8,
+            ),
+            CheckboxListTile(
+              value: widget.category.goal.enabled,
+              title: Text("Enable Goal"),
+              onChanged: (value){
+                setState(() {
+                  widget.category.goal.enabled = value;
+                });
+              },
             ),
             SizedBox(
               height: 16,
