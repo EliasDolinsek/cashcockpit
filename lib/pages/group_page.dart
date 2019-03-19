@@ -71,7 +71,8 @@ class _GroupPageState extends State<GroupPage> {
   }
 
   void _setupTextController() {
-    _nameController = TextEditingController(text: widget.group.name);
+    _nameController =
+        TextEditingController(text: widget.editMode ? widget.group.name : "");
   }
 
   @override
@@ -83,7 +84,7 @@ class _GroupPageState extends State<GroupPage> {
       ),
       body: Padding(
         padding: EdgeInsets.all(16.0),
-        child: ListView(
+        child: Column(
           children: <Widget>[
             TextField(
               controller: _nameController,
@@ -91,43 +92,79 @@ class _GroupPageState extends State<GroupPage> {
                   labelText: "Name", border: OutlineInputBorder()),
               onChanged: (value) {
                 setState(() {
-                  widget.group.name = value;
+                  if (value.trim().length == 0) {
+                    widget.group.name = "New Group";
+                  } else {
+                    widget.group.name = value;
+                  }
                 });
               },
             ),
             SizedBox(
               height: 8,
             ),
-            DataTable(
-              columns: <DataColumn>[
-                DataColumn(label: Text("Add")),
-                DataColumn(label: Text("Category"))
-              ],
-              rows: widget.dataProvider.categories
-                  .map(
-                    (category) => DataRow(
-                          cells: <DataCell>[
-                            DataCell(
-                              Checkbox(
-                                  value: widget.group.categoryIDs
-                                      .contains(category.id),
-                                  onChanged: (value) {
-                                    setState(() {
-                                      if (value) {
-                                        widget.group.categoryIDs
-                                            .add(category.id);
-                                      } else {
-                                        widget.group.categoryIDs
-                                            .remove(category.id);
-                                      }
-                                    });
-                                  }),
+            Expanded(
+                child: ListView(
+              children: <Widget>[
+                DataTable(
+                  columns: <DataColumn>[
+                    DataColumn(label: Text("Add")),
+                    DataColumn(label: Text("Category"))
+                  ],
+                  rows: widget.dataProvider.categories
+                      .map(
+                        (category) => DataRow(
+                              cells: <DataCell>[
+                                DataCell(
+                                  Checkbox(
+                                    value: widget.group.categoryIDs
+                                        .contains(category.id),
+                                    onChanged: (value) {
+                                      setState(() {
+                                        if (widget.group.categoryIDs
+                                            .contains(category.id)) {
+                                          widget.group.categoryIDs
+                                              .remove(category.id);
+                                        } else {
+                                          widget.group.categoryIDs
+                                              .add(category.id);
+                                        }
+                                      });
+                                    },
+                                  ),
+                                ),
+                                DataCell(Text(category.name))
+                              ],
                             ),
-                            DataCell(Text(category.name))
-                          ],
+                      )
+                      .toList(),
+                ),
+              ],
+            )),
+            ButtonBar(
+              children: <Widget>[
+                RaisedButton(
+                  onPressed: () {
+                    if (widget.editMode) {
+                      widget.dataProvider.changeGroup(widget.group);
+                    } else {
+                      widget.dataProvider.addGroup(widget.group);
+                    }
+
+                    Navigator.pop(context);
+                  },
+                  child: widget.editMode
+                      ? Text(
+                          "Save",
+                          style: TextStyle(color: Colors.white),
+                        )
+                      : Text(
+                          "Create",
+                          style: TextStyle(color: Colors.white),
                         ),
-                  )
-                  .toList(),
+                  color: Theme.of(context).primaryColor,
+                ),
+              ],
             )
           ],
         ),

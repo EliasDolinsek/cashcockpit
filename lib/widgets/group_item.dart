@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:cash_cockpit/core/currency/currency.dart';
 import 'package:cash_cockpit/core/group.dart';
 import 'package:cash_cockpit/core/settings/settings.dart';
 

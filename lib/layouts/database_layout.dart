@@ -178,6 +178,7 @@ class _GroupList extends StatefulWidget {
 }
 
 class _GroupListState extends State<_GroupList> {
+
   Function _onGroupChange;
 
   @override

@@ -66,6 +66,11 @@ class CashCockpit extends StatelessWidget {
                   BankAccountPage(bankAccount, true, dataProvider)
 
           );
+        } else if (direction == "group") {
+          final group = Group.findById(dataProvider.groups, pathElements[2]);
+          return MaterialPageRoute(
+              builder: (context) => GroupPage(group, true, dataProvider)
+          );
         }
         return null;
       },

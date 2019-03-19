@@ -386,7 +386,7 @@ class DataProvider {
       var group = Group.fromSnapshot(event.snapshot);
       for(var currentGroup in groups){
         if(currentGroup.id == group.id){
-          groups.remove(group);
+          groups.remove(currentGroup);
           break;
         }
       }
