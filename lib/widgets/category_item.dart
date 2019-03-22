@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import '../core/category.dart';
 
 class CategoryItem extends StatelessWidget {
-
   final Category category;
   final Function onDelete;
 
@@ -35,27 +34,29 @@ class CategoryItem extends StatelessWidget {
                 style: TextStyle(color: Colors.white),
               ),
               backgroundColor: Colors.red,
-              onPressed: () =>
-                  showDialog(context: context, builder: (context) => AlertDialog(
-                    title: Text("Delete Category"),
-                    content: Text("Deleteing a category can not be redone!"),
-                    actions: <Widget>[
-                      MaterialButton(
-                        child: Text("Cancel"),
-                        onPressed: () => Navigator.pop(context),
-                      ),
-                      MaterialButton(
-                        child: Text("Delete"),
-                        onPressed: (){
-                          onDelete();
-                          Navigator.pop(context);
-                        },
-                      )
-                    ],
-                  )),
+              onPressed: () => showDialog(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                        title: Text("Delete Category"),
+                        content:
+                            Text("Deleteing a category can not be redone!"),
+                        actions: <Widget>[
+                          MaterialButton(
+                            child: Text("Cancel"),
+                            onPressed: () => Navigator.pop(context),
+                          ),
+                          MaterialButton(
+                            child: Text("Delete"),
+                            onPressed: () {
+                              onDelete();
+                              Navigator.pop(context);
+                            },
+                          )
+                        ],
+                      )),
             )
           ],
-        )
+        ),
       ],
     );
   }

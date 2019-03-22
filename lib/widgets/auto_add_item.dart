@@ -1,22 +1,20 @@
+import 'package:cash_cockpit/core/autoadd.dart';
+import 'package:cash_cockpit/core/settings/settings.dart';
 import 'package:flutter/material.dart';
 
-import 'package:cash_cockpit/core/group.dart';
-import 'package:cash_cockpit/core/settings/settings.dart';
-
-class GroupItem extends StatelessWidget {
-  final Group group;
+class AutoAddItem extends StatelessWidget {
+  final AutoAdd autoAdd;
   final Function onDelete;
   final Settings settings;
 
-  GroupItem(this.group, this.onDelete, this.settings);
+  AutoAddItem(this.autoAdd, this.onDelete, this.settings);
 
   @override
   Widget build(BuildContext context) {
     return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         Text(
-          group.name,
+          autoAdd.name,
           textAlign: TextAlign.center,
           style: TextStyle(
               fontFamily: "Roboto", fontSize: 34, fontWeight: FontWeight.bold),
@@ -26,7 +24,7 @@ class GroupItem extends StatelessWidget {
           children: <Widget>[
             Chip(
               label: Text(
-                "${group.categoryIDs.length} Categories",
+                AutoAdd.periodicityAsString(autoAdd).toUpperCase(),
                 style: TextStyle(color: Colors.white),
               ),
               backgroundColor: Theme.of(context).primaryColor,
@@ -35,7 +33,7 @@ class GroupItem extends StatelessWidget {
             ActionChip(
               label: Text("Edit"),
               onPressed: () {
-                Navigator.pushNamed(context, "/group/${group.id}");
+                Navigator.pushNamed(context, "/auto_add/${autoAdd.id}");
               },
             ),
             SizedBox(width: 8),
@@ -48,23 +46,23 @@ class GroupItem extends StatelessWidget {
               onPressed: () => showDialog(
                   context: context,
                   builder: (context) => AlertDialog(
-                        title: Text("Delete group"),
-                        content:
-                            Text("Deleteing a group can not be redone!"),
-                        actions: <Widget>[
-                          MaterialButton(
-                            child: Text("Cancel"),
-                            onPressed: () => Navigator.pop(context),
-                          ),
-                          MaterialButton(
-                            child: Text("Delete"),
-                            onPressed: () {
-                              onDelete();
-                              Navigator.pop(context);
-                            },
-                          )
-                        ],
-                      )),
+                    title: Text("Delete AutoAdd"),
+                    content:
+                    Text("Deleteing an AutoAdd can not be redone!"),
+                    actions: <Widget>[
+                      MaterialButton(
+                        child: Text("Cancel"),
+                        onPressed: () => Navigator.pop(context),
+                      ),
+                      MaterialButton(
+                        child: Text("Delete"),
+                        onPressed: () {
+                          onDelete();
+                          Navigator.pop(context);
+                        },
+                      )
+                    ],
+                  )),
             )
           ],
         ),

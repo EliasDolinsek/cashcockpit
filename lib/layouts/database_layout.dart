@@ -1,3 +1,4 @@
+import 'package:cash_cockpit/widgets/auto_add_item.dart';
 import 'package:flutter/material.dart';
 
 import '../widgets/category_item.dart';
@@ -41,7 +42,7 @@ class DatabaseLayout extends StatelessWidget {
           body: TabBarView(children: [
             _CategoriesList(dataProvider),
             _GroupList(dataProvider),
-            Text("AutoAdds"),
+            _AutoAddList(dataProvider),
             _BankAccountList(dataProvider),
           ]),
         ),
@@ -178,7 +179,6 @@ class _GroupList extends StatefulWidget {
 }
 
 class _GroupListState extends State<_GroupList> {
-
   Function _onGroupChange;
 
   @override
@@ -208,7 +208,7 @@ class _GroupListState extends State<_GroupList> {
         child: Icon(Icons.add),
       ),
       body: ListView.separated(
-        padding: EdgeInsets.symmetric(vertical: 8.0),
+          padding: EdgeInsets.symmetric(vertical: 8.0),
           itemBuilder: (context, index) =>
               GroupItem(widget.dataProvider.groups.elementAt(index), () {
                 setState(() {
@@ -218,6 +218,62 @@ class _GroupListState extends State<_GroupList> {
               }, widget.dataProvider.settings),
           separatorBuilder: (context, index) => Divider(),
           itemCount: widget.dataProvider.groups.length),
+    );
+  }
+}
+
+class _AutoAddList extends StatefulWidget {
+  final DataProvider dataProvider;
+
+  _AutoAddList(this.dataProvider);
+
+  @override
+  State<StatefulWidget> createState() {
+    return _AutoAddListState();
+  }
+}
+
+class _AutoAddListState extends State<_AutoAddList> {
+  Function _onAutoAddChange;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _onAutoAddChange = (a) {
+      setState(() {});
+    };
+
+    widget.dataProvider.addAutoAddEventListener(_onAutoAddChange);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+
+    widget.dataProvider.removeAutoAddEventListener(_onAutoAddChange);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.pushNamed(context, "/auto_add");
+        },
+        child: Icon(Icons.add),
+      ),
+      body: ListView.separated(
+        padding: EdgeInsets.symmetric(vertical: 8.0),
+          itemBuilder: (context, index) =>
+              AutoAddItem(widget.dataProvider.autoAdds.elementAt(index), () {
+                setState(() {
+                  widget.dataProvider.removeAutoAdd(
+                      widget.dataProvider.autoAdds.elementAt(index));
+                });
+              }, widget.dataProvider.settings),
+          separatorBuilder: (context, index) => Divider(),
+          itemCount: widget.dataProvider.autoAdds.length),
     );
   }
 }

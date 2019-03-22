@@ -92,6 +92,18 @@ class DataProvider {
     onGroupChanged.remove(f);
   }
 
+  void addAutoAddEventListener(Function f(a)){
+    onAutoAddAdded.add(f);
+    onAutoAddRemoved.add(f);
+    onAutoAddChanged.add(f);
+  }
+
+  void removeAutoAddEventListener(Function f(a)){
+    onAutoAddAdded.remove(f);
+    onAutoAddRemoved.add(f);
+    onAutoAddChanged.add(f);
+  }
+
 
   //Add
   Future<void> addBankAccount(BankAccount b) async {
