@@ -1,3 +1,5 @@
+import 'package:cash_cockpit/core/autoadd.dart';
+import 'package:cash_cockpit/core/bill.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -43,7 +45,7 @@ class CashCockpit extends StatelessWidget {
         "/bank_account": (context) =>
             BankAccountPage(BankAccount(), false, dataProvider),
         "/group": (context) => GroupPage(Group([]), false, dataProvider),
-        "/auto_add": (context) => AutoAddPage()
+        "/auto_add": (context) => AutoAddPage(AutoAdd(Bill()), false, dataProvider)
       },
       onGenerateRoute: (RouteSettings settings) {
         final List<String> pathElements = settings.name.split('/');
@@ -72,6 +74,11 @@ class CashCockpit extends StatelessWidget {
           final group = Group.findById(dataProvider.groups, pathElements[2]);
           return MaterialPageRoute(
               builder: (context) => GroupPage(group, true, dataProvider)
+          );
+        } else if(direction == "auto_add"){
+          final autoAdd = AutoAdd.findById(dataProvider.autoAdds, pathElements[2]);
+          return MaterialPageRoute(
+            builder: (context) => AutoAddPage(autoAdd, true, dataProvider)
           );
         }
         return null;

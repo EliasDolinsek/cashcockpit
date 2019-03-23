@@ -1,4 +1,4 @@
-import 'package:cash_cockpit/core/category.dart';
+import 'package:flutter_material_color_picker/flutter_material_color_picker.dart';
 import 'package:cash_cockpit/core/data/data_provider.dart';
 import 'package:cash_cockpit/core/group.dart';
 import 'package:flutter/material.dart';
@@ -101,8 +101,37 @@ class _GroupPageState extends State<GroupPage> {
               },
             ),
             SizedBox(
-              height: 8,
+              height: 8.0,
             ),
+            ActionChip(
+              avatar: CircleAvatar(
+                backgroundColor: Color(widget.group.color),
+              ),
+              label: Text("CHANGE GROUP COLOR"),
+              onPressed: () {
+                showDialog(context: context, builder: (context) => AlertDialog(
+                  title: Text("Group Color"),
+                  content: MaterialColorPicker(
+                    selectedColor: Color(widget.group.color),
+                    onColorChange: (c){
+                      setState(() {
+                        widget.group.color = c.value;
+                      });
+                    },
+                  ),
+                  actions: <Widget>[
+                    MaterialButton(
+                      child: Text("CLOSE"),
+                      onPressed: (){
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                  ],
+                ));
+              },
+            ),
+            SizedBox(height: 8.0,),
+            Divider(),
             Expanded(
                 child: ListView(
               children: <Widget>[

@@ -11,7 +11,7 @@ class AutoAdd {
   int periodicity, addingDate;
   Bill bill;
 
-  AutoAdd(this.bill, {this.id, this.name, this.periodicity, this.addingDate});
+  AutoAdd(this.bill, {this.id, this.name = "New AutoAdd", this.periodicity, this.addingDate});
 
   factory AutoAdd.fromSnapshot(DataSnapshot s) => AutoAdd(
     Bill.fromSnapshot(s),

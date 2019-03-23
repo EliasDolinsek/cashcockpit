@@ -155,7 +155,7 @@ class DataProvider {
     return remoteDataService.groupsReference.child(g.id).remove();
   }
 
-  Future<void> removePreset(Preset p) async {
+  Future<void> removePreset(Preset p) {
     return remoteDataService.presetsReference.child(p.id).remove();
   }
 
@@ -174,6 +174,10 @@ class DataProvider {
 
   Future<void> changePreset(Preset p){
     return remoteDataService.presetsReference.child(p.id).update(p.toMap());
+  }
+
+  Future<void> changeAutoAdd(AutoAdd a){
+    return remoteDataService.autoAddsReference.child(a.id).update(a.toMap());
   }
 
   Future<void> changeSettings(Settings s){
