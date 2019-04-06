@@ -36,6 +36,7 @@ class _GroupPageState extends State<GroupPage> {
                 "Updated values because group got edited on another device")));
         setState(() {
           widget.group = updatedGroup;
+          _setupTextController();
         });
       }
     };

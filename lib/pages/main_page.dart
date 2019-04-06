@@ -1,3 +1,4 @@
+import 'package:cash_cockpit/core/settings/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -6,7 +7,6 @@ import '../layouts/database_layout.dart';
 import '../core/data/data_provider.dart';
 
 class MainPage extends StatefulWidget {
-
   final DataProvider dataProvider;
 
   MainPage(this.dataProvider);
@@ -18,7 +18,6 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
-
   int _currentIndex = 0;
 
   List<Widget> _children;
@@ -27,7 +26,30 @@ class _MainPageState extends State<MainPage> {
   void initState() {
     super.initState();
     _children = [
-      Text("Cockpit"),
+      Center(
+        child: Column(
+          children: <Widget>[
+            MaterialButton(
+              child: Text("Sign out account"),
+              onPressed: () {
+                FirebaseAuth.instance.signOut();
+              },
+            ),
+            MaterialButton(
+              child: Text("Create settings"),
+              onPressed: (){
+                widget.dataProvider.setSettings(Settings(currencyISOCode: "EUR", pin: 1234, thousandSeparatorSymbol: Settings.SEPARATOR_POINT, centSeparatorSymbol: Settings.SEPARATOR_COMMA));
+              },
+            ),
+            MaterialButton(
+              child: Text("Show settings setup"),
+              onPressed: (){
+                Navigator.pushNamed(context, "/settings_setup");
+              },
+            )
+          ],
+        )
+      ),
       Text("History"),
       Text("Statistics"),
       DatabaseLayout(widget.dataProvider),

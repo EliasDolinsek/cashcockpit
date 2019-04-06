@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import '../core/sing_up_toolbox.dart';
-import '../tools/auth.dart';
+import '../../core/sing_up_toolbox.dart';
+import '../../tools/auth.dart';
 
 class SignUpPage extends StatelessWidget {
   @override

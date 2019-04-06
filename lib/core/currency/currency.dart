@@ -9,14 +9,51 @@ class Currency {
       isoCode: "USD",
       currencySymbolAlignment: CurrencySymbolAlignment.LEFT,
       currencySymbol: "\$");
+
   static const EUR = Currency(
       isoCode: "EUR",
       currencySymbolAlignment: CurrencySymbolAlignment.RIGHT,
       currencySymbol: "€");
+
   static const JPY = Currency(
       isoCode: "JPY",
       currencySymbolAlignment: CurrencySymbolAlignment.LEFT,
       currencySymbol: "¥");
+
+  static const GBP = Currency(
+      isoCode: "GBP",
+      currencySymbolAlignment: CurrencySymbolAlignment.LEFT,
+      currencySymbol: "£");
+
+  static const AUD = Currency(
+      isoCode: "AUD",
+      currencySymbolAlignment: CurrencySymbolAlignment.LEFT,
+      currencySymbol: "\$");
+
+  static const CAD = Currency(
+      isoCode: "CAD",
+      currencySymbolAlignment: CurrencySymbolAlignment.LEFT,
+      currencySymbol: "\$");
+
+  static const CHF = Currency(
+    isoCode: "CHF",
+    currencySymbolAlignment: CurrencySymbolAlignment.RIGHT,
+      currencySymbol: "CHF"
+  );
+
+  static const SEK = Currency(
+    isoCode: "SEK",
+    currencySymbolAlignment: CurrencySymbolAlignment.RIGHT,
+    currencySymbol: "Skr"
+  );
+
+  static const NZD = Currency(
+    isoCode: "NZD",
+    currencySymbolAlignment: CurrencySymbolAlignment.LEFT,
+    currencySymbol: "\$"
+  );
+
+  static List<Currency> getDefaultCurrencies() => [USD, EUR, JPY, GBP, AUD, CAD, CHF, SEK, NZD];
 
   final String isoCode, currencySymbol;
   final CurrencySymbolAlignment currencySymbolAlignment;
@@ -47,7 +84,7 @@ class CurrencyFormatter {
     resultString = resultString.replaceAll(s.thousandSeparator, "");
     resultString = resultString.replaceAll(s.currency.currencySymbol, "");
 
-    if(s.centSeparatorSymbol == Settings.SEPARATOR_COMMA){
+    if (s.centSeparatorSymbol == Settings.SEPARATOR_COMMA) {
       resultString = resultString.replaceAll(s.centSeparator, ".");
     }
 
@@ -56,14 +93,16 @@ class CurrencyFormatter {
 
   static String formatAmount(double amount, Settings s) {
     var formatterOutput = FlutterMoneyFormatter(
-        amount: amount,
-        settings: MoneyFormatterSettings(
-            thousandSeparator: s.thousandSeparator,
-            decimalSeparator: s.centSeparator,
-          symbol: s.currency.currencySymbol
-        )).output;
+            amount: amount,
+            settings: MoneyFormatterSettings(
+                thousandSeparator: s.thousandSeparator,
+                decimalSeparator: s.centSeparator,
+                symbol: s.currency.currencySymbol))
+        .output;
 
-    return s.currency.currencySymbolAlignment == CurrencySymbolAlignment.RIGHT ? formatterOutput.symbolOnRight : formatterOutput.symbolOnLeft;
+    return s.currency.currencySymbolAlignment == CurrencySymbolAlignment.RIGHT
+        ? formatterOutput.symbolOnRight
+        : formatterOutput.symbolOnLeft;
   }
 }
 

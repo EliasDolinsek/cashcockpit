@@ -10,6 +10,9 @@ import '../preset.dart';
 import '../settings/settings.dart';
 
 class DataProvider {
+
+  static const String USER_SETTINGS_CHILD = "user_settings";
+
   final List<Function(Category value)> onCategoryAdded = [];
   final List<Function(Category value)> onCategoryRemoved = [];
   final List<Function(Category value)> onCategoryChanged = [];
@@ -131,7 +134,7 @@ class DataProvider {
   }
 
   Future<void> setSettings(Settings s) async {
-    return remoteDataService.settingsReference.child(s.id).set(s.toMap());
+    return remoteDataService.settingsReference.child(USER_SETTINGS_CHILD).set(s.toMap());
   }
 
   //Remove
@@ -181,7 +184,7 @@ class DataProvider {
   }
 
   Future<void> changeSettings(Settings s){
-    return remoteDataService.settingsReference.update(s.toMap());
+    return remoteDataService.settingsReference.child(USER_SETTINGS_CHILD).update(s.toMap());
   }
 
   //On added

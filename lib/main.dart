@@ -1,12 +1,13 @@
 import 'package:cash_cockpit/core/autoadd.dart';
 import 'package:cash_cockpit/core/bill.dart';
+import 'package:cash_cockpit/core/setup/settings_setup_pages/settings_setup_start_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import './pages/main_page.dart';
-import './pages/sign_in_option_page.dart';
-import './pages/sign_in_page.dart';
-import './pages/sign_up_page.dart';
+import 'package:cash_cockpit/core/setup/sign_in_option_page.dart';
+import 'package:cash_cockpit/core/setup/sign_in_page.dart';
+import 'package:cash_cockpit/core/setup/sign_up_page.dart';
 
 import './pages/bank_account_page.dart';
 import './pages/category_page.dart';
@@ -45,7 +46,8 @@ class CashCockpit extends StatelessWidget {
         "/bank_account": (context) =>
             BankAccountPage(BankAccount(), false, dataProvider),
         "/group": (context) => GroupPage(Group([]), false, dataProvider),
-        "/auto_add": (context) => AutoAddPage(AutoAdd(Bill()), false, dataProvider)
+        "/auto_add": (context) => AutoAddPage(AutoAdd(Bill()), false, dataProvider),
+        "/settings_setup": (context) => SettingsSetupStartPage(dataProvider)
       },
       onGenerateRoute: (RouteSettings settings) {
         final List<String> pathElements = settings.name.split('/');
