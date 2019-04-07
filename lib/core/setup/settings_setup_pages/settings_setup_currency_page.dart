@@ -2,6 +2,7 @@ import 'package:cash_cockpit/core/currency/currency.dart';
 import 'package:cash_cockpit/core/data/data_provider.dart';
 import 'package:cash_cockpit/core/settings/settings.dart';
 import 'package:cash_cockpit/core/setup/settings_setup_pages/settings_setup_data_management.dart';
+import 'package:cash_cockpit/core/setup/settings_setup_pages/settings_setup_security_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -65,7 +66,7 @@ class SettingsSetupCurrencyPage extends StatelessWidget {
   void _showNextPage(BuildContext context) async {
     var user = await FirebaseAuth.instance.currentUser();
     if (user.isAnonymous) {
-      //TODO show security settings page
+      Navigator.push(context, MaterialPageRoute(builder: (context) => SettingsSetupSecurityPage(_dataProvider)));
     } else {
       Navigator.push(
         context,

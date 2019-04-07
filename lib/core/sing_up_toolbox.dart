@@ -6,6 +6,7 @@ class SignUpToolbox {
       case "ERROR_WRONG_PASSWORD": return "Wrong password";
       case "ERROR_USER_NOT_FOUND": return "Email not taken by an account";
       case "ERROR_TOO_MANY_REQUESTS": return "Too many requests, try again";
+      case "ERROR_INVALID_EMAIL": return "Invalid E-Mail";
       default: {
         print("Unknown firebase-error-code: $code");
         return "An error occoured, please check your inputs";

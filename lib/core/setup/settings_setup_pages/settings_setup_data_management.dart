@@ -1,4 +1,5 @@
 import 'package:cash_cockpit/core/data/data_provider.dart';
+import 'package:cash_cockpit/core/setup/settings_setup_pages/settings_setup_security_page.dart';
 import 'package:flutter/material.dart';
 
 class SettingsSetupDataManagement extends StatelessWidget {
@@ -14,6 +15,7 @@ class SettingsSetupDataManagement extends StatelessWidget {
         padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 64),
         child: Column(
           children: <Widget>[
+            SizedBox(height: 32.0,),
             Text(
               "DATA",
               style: TextStyle(fontSize: 48),
@@ -44,7 +46,7 @@ class SettingsSetupDataManagement extends StatelessWidget {
                     style: TextStyle(color: Colors.white),
                   ),
                   onPressed: () {
-                    //_showNextPage(context);
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => SettingsSetupSecurityPage(_dataProvider)));
                   },
                   color: Theme
                       .of(context)
@@ -115,6 +117,6 @@ class _DataSettingsSelectionState extends State<_DataSettingsSelection> {
   void _setImageSavageLocation(bool saveImagesLocallyOnly) {
     var settings = widget.dataProvider.settings;
     settings.saveImageLocallyOnly = saveImagesLocallyOnly;
-    widget.dataProvider.changeSettings(settings)
+    widget.dataProvider.changeSettings(settings);
   }
 }

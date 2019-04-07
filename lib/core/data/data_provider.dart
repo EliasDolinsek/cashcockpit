@@ -51,6 +51,10 @@ class DataProvider {
   RemoteDataService remoteDataService = RemoteDataService();
 
   DataProvider() {
+    setup();
+  }
+
+  void setup(){
     remoteDataService.setupDatalinks().whenComplete(() {
       _setupOnAdded();
       _setupOnChanged();

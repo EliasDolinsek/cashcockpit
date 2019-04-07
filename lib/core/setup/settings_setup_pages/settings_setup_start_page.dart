@@ -4,9 +4,12 @@ import 'package:cash_cockpit/core/setup/settings_setup_pages/settings_setup_curr
 import 'package:flutter/material.dart';
 
 class SettingsSetupStartPage extends StatelessWidget {
+
   final DataProvider _dataProvider;
 
-  SettingsSetupStartPage(this._dataProvider);
+  SettingsSetupStartPage(this._dataProvider){
+    _dataProvider.setup();
+  }
 
   @override
   Widget build(BuildContext context) {

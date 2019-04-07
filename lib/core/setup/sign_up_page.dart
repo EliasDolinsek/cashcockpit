@@ -138,7 +138,7 @@ class _SignUpInputsState extends State<_SignUpInputs> {
   void _signUpUser() async {
     try {
       await Auth().signUpUser(_email, _password);
-      Navigator.pushReplacementNamed(context, "/main");
+      Navigator.pushReplacementNamed(context, "/settings_setup");
     } catch (e) {
       if (e is PlatformException) {
         setState(() {

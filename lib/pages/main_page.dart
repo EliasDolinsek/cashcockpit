@@ -1,12 +1,14 @@
 import 'package:cash_cockpit/core/settings/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/scheduler.dart';
 
 import '../layouts/database_layout.dart';
 
 import '../core/data/data_provider.dart';
 
 class MainPage extends StatefulWidget {
+
   final DataProvider dataProvider;
 
   MainPage(this.dataProvider);
@@ -25,6 +27,9 @@ class _MainPageState extends State<MainPage> {
   @override
   void initState() {
     super.initState();
+
+    _showSetupPageIfSomethingMissing(context);
+
     _children = [
       Center(
         child: Column(
@@ -57,7 +62,7 @@ class _MainPageState extends State<MainPage> {
     ];
   }
 
-  void _showSignInOptionsPageIfUserIsNotAuthenticated(
+  void _showSetupPageIfSomethingMissing(
       BuildContext context) async {
     final FirebaseUser user = await FirebaseAuth.instance.currentUser();
 
@@ -70,7 +75,6 @@ class _MainPageState extends State<MainPage> {
 
   @override
   Widget build(BuildContext context) {
-    _showSignInOptionsPageIfUserIsNotAuthenticated(context);
     return Scaffold(
       body: _children[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(

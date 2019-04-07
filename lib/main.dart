@@ -28,6 +28,7 @@ void main() {
 }
 
 class CashCockpit extends StatelessWidget {
+
   final dataProvider = DataProvider();
 
   @override
