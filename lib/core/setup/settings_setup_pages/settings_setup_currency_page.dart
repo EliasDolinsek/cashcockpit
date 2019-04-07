@@ -1,6 +1,8 @@
 import 'package:cash_cockpit/core/currency/currency.dart';
 import 'package:cash_cockpit/core/data/data_provider.dart';
 import 'package:cash_cockpit/core/settings/settings.dart';
+import 'package:cash_cockpit/core/setup/settings_setup_pages/settings_setup_data_management.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class SettingsSetupCurrencyPage extends StatelessWidget {
@@ -27,7 +29,7 @@ class SettingsSetupCurrencyPage extends StatelessWidget {
               height: 32.0,
             ),
             Expanded(
-              child: _CurrencySelection(_dataProvider),
+              child: _CurrencyAndFormattingSelection(_dataProvider),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -47,7 +49,9 @@ class SettingsSetupCurrencyPage extends StatelessWidget {
                     "NEXT",
                     style: TextStyle(color: Colors.white),
                   ),
-                  onPressed: () {},
+                  onPressed: () {
+                    _showNextPage(context);
+                  },
                   color: Theme.of(context).primaryColor,
                 )
               ],
@@ -57,23 +61,35 @@ class SettingsSetupCurrencyPage extends StatelessWidget {
       ),
     );
   }
-}
 
-class _CurrencySelection extends StatefulWidget {
-  final DataProvider dataProvider;
-
-  _CurrencySelection(this.dataProvider);
-
-  @override
-  State<StatefulWidget> createState() {
-    return _CurrencySelectionState();
+  void _showNextPage(BuildContext context) async {
+    var user = await FirebaseAuth.instance.currentUser();
+    if (user.isAnonymous) {
+      //TODO show security settings page
+    } else {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => SettingsSetupDataManagement(_dataProvider),
+        ),
+      );
+    }
   }
 }
 
-class _CurrencySelectionState extends State<_CurrencySelection> {
-  String _thousandSeparationValue = "comma";
-  String _decimalSeparationValue = "point";
+class _CurrencyAndFormattingSelection extends StatefulWidget {
+  final DataProvider dataProvider;
 
+  _CurrencyAndFormattingSelection(this.dataProvider);
+
+  @override
+  State<StatefulWidget> createState() {
+    return _CurrencyAndFormattingSelectionState();
+  }
+}
+
+class _CurrencyAndFormattingSelectionState
+    extends State<_CurrencyAndFormattingSelection> {
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -100,24 +116,28 @@ class _CurrencySelectionState extends State<_CurrencySelection> {
         SizedBox(
           height: 32.0,
         ),
-        Column(
-          children: <Widget>[
-            Column(
-              children: <Widget>[
-                Text("Thousand separation: "),
-                _getThousandSeparationChips()
-              ],
-            ),
-            SizedBox(
-              height: 24.0,
-            ),
-            Column(
-              children: <Widget>[
-                Text("Decimal separation: "),
-                _getCentSeparationChips()
-              ],
-            ),
-          ],
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: 16.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Column(
+                children: <Widget>[
+                  Text("Thousand separation: "),
+                  _getThousandSeparationChips()
+                ],
+              ),
+              SizedBox(
+                height: 24.0,
+              ),
+              Column(
+                children: <Widget>[
+                  Text("Decimal separation: "),
+                  _getCentSeparationChips()
+                ],
+              ),
+            ],
+          ),
         )
       ],
     );

@@ -8,7 +8,7 @@ class Settings {
   //ISO 4217
   String currencyISOCode, id;
   int pin, centSeparatorSymbol, thousandSeparatorSymbol;
-  bool saveImageLocallyOnly, pinRequiredForLogin;
+  bool saveImageLocallyOnly, pinRequiredForLogin, saveDataOnFirebase;
 
   Settings(
       {this.id = "user_settings",
@@ -17,7 +17,8 @@ class Settings {
       this.centSeparatorSymbol,
       this.thousandSeparatorSymbol,
       this.saveImageLocallyOnly,
-      this.pinRequiredForLogin});
+      this.pinRequiredForLogin,
+      this.saveDataOnFirebase});
 
   Currency get currency => Currency.getDefaultCurrencies()
       .firstWhere((c) => c.isoCode == currencyISOCode);
@@ -28,7 +29,8 @@ class Settings {
         "centSeparatorSymbol": centSeparatorSymbol,
         "thousandSeparatorSymbol": thousandSeparatorSymbol,
         "saveImageLocallyOnly": saveImageLocallyOnly,
-        "pinRequiredForLogin": pinRequiredForLogin
+        "pinRequiredForLogin": pinRequiredForLogin,
+        "saveDataOnFirebase": saveDataOnFirebase
       };
 
   factory Settings.fromSnapshot(DataSnapshot s) => Settings(
@@ -37,7 +39,8 @@ class Settings {
       centSeparatorSymbol: s.value["centSeparatorSymbol"],
       thousandSeparatorSymbol: s.value["thousandSeparatorSymbol"],
       saveImageLocallyOnly: s.value["saveImageLocallyOnly"],
-      pinRequiredForLogin: s.value["pinRequiredForLogin"]);
+      pinRequiredForLogin: s.value["pinRequiredForLogin"],
+      saveDataOnFirebase: s.value["saveDataOnFirebase"]);
 
   String get centSeparator =>
       centSeparatorSymbol == SEPARATOR_COMMA ? "," : ".";
